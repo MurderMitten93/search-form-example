@@ -33,7 +33,7 @@ body{
   float: left;
 }
 
-.col-1, .col-3{
+.col-1{
   width: 30%;
 }
 

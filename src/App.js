@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ContactsList from './ContactsList';
+import FilterForm from './FilterForm';
 
 let contacts = [{
     id: 1,
@@ -54,16 +55,82 @@ let contacts = [{
 
 class App extends Component {
 
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-            <h1>Filter Form</h1>
-            <ContactsList contacts={contacts}/>
 
-        </header>
-      </div>
-    );
+    constructor(props){
+        super(props);
+        this.state = {
+            search: '',
+            selectedOption: 'col1',
+            contacts: contacts
+        }
+    }
+
+    updateSearch = (event) => {
+        this.setState({
+            ...this.state,
+            search: event.target.value
+        });
+    };
+
+    optionChange = (event) => {
+        this.setState({
+            selectedOption: event.target.value,
+        });
+    };
+
+    onDragOver = (ev) => {
+        ev.preventDefault();
+    };
+
+    onDrop = (ev, colNum) => {
+        let name = ev.dataTransfer.getData("name");
+        let contacts = this.state.contacts.filter((contact) => {
+            if (contact.name === name) {
+                contact.col = colNum;
+            }
+            return contact;
+        });
+
+        this.setState({
+            ...this.state,
+            contacts
+        });
+    };
+
+    render() {
+        return (
+          <div className="App">
+            <header className="App-header">
+                <div className="container">
+                    <h1>Filter Form</h1>
+                    <ContactsList
+                        contacts={this.state.contacts}
+                        col="col1"
+                        selectedOption={this.state.selectedOption}
+                        search={this.state.search}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>this.onDrop(e, "col1")}
+                    />
+
+                    <FilterForm
+                        search={this.state.search}
+                        selectedOption={this.state.selectedOption}
+                        onSearchChange={this.updateSearch}
+                        onColChange={this.optionChange}
+                    />
+
+                    <ContactsList
+                        contacts={this.state.contacts}
+                        col="col2"
+                        selectedOption={this.state.selectedOption}
+                        search={this.state.search}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>this.onDrop(e, "col2")}
+                    />
+                </div>
+            </header>
+          </div>
+        );
   }
 }
 
