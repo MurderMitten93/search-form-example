@@ -17,6 +17,7 @@ class FilterForm extends Component {
                                    checked={this.props.selectedOption === 'col1'}
                                    onChange={this.props.onColChange}/>
                             11
+
                         </label>
                         <label>
                             <input type="radio"
